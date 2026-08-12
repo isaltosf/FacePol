@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Comunidad extends Model
 {
@@ -67,5 +68,15 @@ class Comunidad extends Model
     public function administrador(): BelongsTo
     {
         return $this->belongsTo(User::class, 'administrador_id');
+    }
+
+    /**
+     * Anuncios y eventos publicados en la comunidad.
+     *
+     * @return HasMany<Publicacion, $this>
+     */
+    public function publicaciones(): HasMany
+    {
+        return $this->hasMany(Publicacion::class);
     }
 }

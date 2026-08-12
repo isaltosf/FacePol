@@ -2,6 +2,9 @@
 
 namespace App\Models\Concerns;
 
+use App\Models\Publicacion;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 /**
  * Relaciones del módulo Publicaciones para el modelo User.
  *
@@ -10,5 +13,13 @@ namespace App\Models\Concerns;
  */
 trait HasPublicaciones
 {
-    //
+    /**
+     * Publicaciones (anuncios/eventos) creadas por este usuario como administrador.
+     *
+     * @return HasMany<Publicacion, $this>
+     */
+    public function publicaciones(): HasMany
+    {
+        return $this->hasMany(Publicacion::class, 'autor_id');
+    }
 }
