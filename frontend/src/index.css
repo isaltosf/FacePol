@@ -411,3 +411,81 @@ h3 {
   flex-wrap: wrap;
   gap: 0.75rem;
 }
+
+/* --------------------------------------------------------- Membresías */
+
+.alerta-exito {
+  background-color: #dcfce7;
+  border: 1px solid #16a34a;
+  border-radius: var(--radio);
+  color: #15803d;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+}
+
+.acciones-membresia {
+  margin-top: 1.5rem;
+}
+
+.acciones-membresia-botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+/* Token panel */
+.token-panel {
+  background-color: #fffbeb;
+  border: 1px solid #fbbf24;
+  border-radius: var(--radio);
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.token-barra {
+  align-items: center;
+  background-color: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+/* Tabla de miembros / solicitudes */
+.tabla-miembros {
+  border-collapse: collapse;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.tabla-miembros th,
+.tabla-miembros td {
+  border: 1px solid var(--color-borde);
+  padding: 0.6rem 0.85rem;
+  text-align: left;
+}
+
+.tabla-miembros th {
+  background-color: #f1f5f9;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.tabla-miembros tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+/* Botón peligro (Rechazar) */
+.boton-peligro {
+  background-color: var(--color-error);
+  border-color: var(--color-error);
+  color: #fff;
+}
+
+.boton-peligro:hover:not(:disabled) {
+  background-color: #991b1b;
+  border-color: #991b1b;
+}
