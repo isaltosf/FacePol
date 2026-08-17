@@ -338,3 +338,76 @@ h3 {
 .detalle dd {
   margin: 0;
 }
+
+/* Módulo Publicaciones (Victor Morales). */
+.boton-enlace {
+  background: none;
+  border: none;
+  color: var(--color-primario, #2563eb);
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.lista-publicaciones {
+  display: grid;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.contenedor-centrado {
+  display: flex;
+  justify-content: center;
+  padding-block: 2rem;
+}
+
+.contenedor-centrado > section {
+  max-width: 24rem;
+  text-align: center;
+  width: 100%;
+}
+
+.contenedor-centrado .formulario {
+  margin-top: 1rem;
+  text-align: left;
+  width: 100%;
+}
+
+.contenedor-centrado .tarjeta {
+  max-width: 24rem;
+  width: 100%;
+}
+
+.aviso-accion {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.tarjeta-cuerpo dl {
+  display: grid;
+  gap: 0.25rem 1rem;
+  grid-template-columns: max-content 1fr;
+  margin: 0.5rem 0 0;
+}
+
+.tarjeta-cuerpo dt {
+  color: var(--color-texto-suave);
+  font-size: 0.85rem;
+}
+
+.tarjeta-cuerpo dd {
+  margin: 0;
+}
+
+.acciones-encabezado {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}

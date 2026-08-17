@@ -63,9 +63,12 @@ export default function DetalleComunidad() {
         <Link to="/comunidades" className="texto-suave">
           ← Volver al catálogo
         </Link>
-        <Link className="boton" to={`/comunidades/${comunidad.id}/editar`}>
-          Editar
-        </Link>
+        <div className="acciones-encabezado">
+          <AccionesPublicaciones comunidadId={comunidad.id} />
+          <Link className="boton" to={`/comunidades/${comunidad.id}/editar`}>
+            Editar
+          </Link>
+        </div>
       </div>
 
       <article className="detalle">
@@ -96,9 +99,8 @@ export default function DetalleComunidad() {
         </dl>
       </article>
 
-      {/* Puntos de extensión de los otros dos módulos. */}
+      {/* Punto de extensión del módulo Membresías. */}
       <AccionesMembresia comunidadId={comunidad.id} />
-      <AccionesPublicaciones comunidadId={comunidad.id} />
     </section>
   )
 }
