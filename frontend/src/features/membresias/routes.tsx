@@ -1,14 +1,11 @@
 import type { RouteObject } from 'react-router-dom'
+import ListaMiembros from './ListaMiembros'
+import PanelSolicitudes from './PanelSolicitudes'
 
-/**
- * Rutas del módulo Membresías.
- *
- * TODO (José): agrega aquí las rutas de tu módulo. App.tsx ya concatena esta
- * lista, así que no necesitas tocar ningún archivo fuera de esta carpeta.
- *
- * Ejemplo:
- *   { path: 'comunidades/:id/miembros', element: <Miembros /> }
- */
-const rutas: RouteObject[] = []
+/** Rutas del módulo Membresías. App.tsx ya concatena esta lista. */
+const rutas: RouteObject[] = [
+  { path: 'comunidades/:id/miembros', element: <ListaMiembros /> },
+  { path: 'comunidades/:id/solicitudes', element: <PanelSolicitudes /> },
+]
 
 export default rutas
