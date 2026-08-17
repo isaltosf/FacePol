@@ -1,17 +1,14 @@
 import { api } from '../../api/client'
+import { obtenerToken } from '../publicaciones/sesion'
 import type { EstadoMembresia, FilaMiembro, FilaSolicitud, RespuestaLista } from './types'
 
-/** Lee el Bearer token almacenado en localStorage. */
-function authHeaders(): HeadersInit {
-  const token = localStorage.getItem('facepol_token') ?? ''
-  return token ? { Authorization: `Bearer ${token}` } : {}
-}
-
-/** Wrapper de api() que inyecta la cabecera de autenticación. */
+/** Wrapper de api() que inyecta el Bearer token de la sesión activa. */
 function apiAuth<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const token = obtenerToken()
+  const authHeader: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {}
   return api<T>(path, {
     ...options,
-    headers: { ...authHeaders(), ...(options.headers as Record<string, string> | undefined) },
+    headers: { ...authHeader, ...(options.headers as Record<string, string> | undefined) },
   })
 }
 

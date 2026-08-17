@@ -1,14 +1,15 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ErrorApi, ErrorValidacion } from '../../api/client'
+import { useSesion } from '../publicaciones/sesion'
 import { solicitarMembresia } from './api'
-import TokenSelector from './TokenSelector'
 
 interface Props {
   comunidadId: string | number
 }
 
 export default function AccionesMembresia({ comunidadId }: Props) {
+  const { haySesion } = useSesion()
   const [enviando, setEnviando] = useState(false)
   const [exito, setExito] = useState('')
   const [errorGeneral, setErrorGeneral] = useState('')
@@ -35,11 +36,20 @@ export default function AccionesMembresia({ comunidadId }: Props) {
     }
   }
 
+  if (!haySesion) {
+    return (
+      <section className="acciones-membresia">
+        <h2 style={{ marginTop: '1.5rem' }}>Membresía</h2>
+        <Link className="boton boton-secundario" to="/feed">
+          Inicia sesión para solicitar membresía
+        </Link>
+      </section>
+    )
+  }
+
   return (
     <section className="acciones-membresia">
       <h2 style={{ marginTop: '1.5rem' }}>Membresía</h2>
-
-      <TokenSelector />
 
       <div className="acciones-membresia-botones">
         <button

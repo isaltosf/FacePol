@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { useSesion } from '../publicaciones/sesion'
 import { obtenerMiembros } from './api'
-import TokenSelector from './TokenSelector'
 import type { FilaMiembro } from './types'
 
 export default function ListaMiembros() {
   const { id = '' } = useParams()
+  const { haySesion } = useSesion()
   const [miembros, setMiembros] = useState<FilaMiembro[]>([])
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState('')
@@ -26,6 +27,15 @@ export default function ListaMiembros() {
     return () => { vigente = false }
   }, [id])
 
+  if (!haySesion) {
+    return (
+      <section>
+        <Link to={`/comunidades/${id}`} className="texto-suave">← Volver al detalle</Link>
+        <p className="aviso">Debes <Link to="/feed">iniciar sesión</Link> para ver los miembros.</p>
+      </section>
+    )
+  }
+
   return (
     <section>
       <div className="encabezado-pagina">
@@ -34,8 +44,6 @@ export default function ListaMiembros() {
         </Link>
         <h1 style={{ margin: 0 }}>Miembros aprobados</h1>
       </div>
-
-      <TokenSelector />
 
       {cargando && <p className="aviso">Cargando miembros…</p>}
 

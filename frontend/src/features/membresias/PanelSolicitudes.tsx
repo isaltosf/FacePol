@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { useSesion } from '../publicaciones/sesion'
 import { actualizarEstado, obtenerSolicitudes } from './api'
-import TokenSelector from './TokenSelector'
 import type { EstadoMembresia, FilaSolicitud } from './types'
 
 export default function PanelSolicitudes() {
   const { id = '' } = useParams()
+  const { haySesion } = useSesion()
   const [solicitudes, setSolicitudes] = useState<FilaSolicitud[]>([])
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState('')
@@ -45,6 +46,15 @@ export default function PanelSolicitudes() {
     }
   }
 
+  if (!haySesion) {
+    return (
+      <section>
+        <Link to={`/comunidades/${id}`} className="texto-suave">← Volver al detalle</Link>
+        <p className="aviso">Debes <Link to="/feed">iniciar sesión</Link> para gestionar solicitudes.</p>
+      </section>
+    )
+  }
+
   return (
     <section>
       <div className="encabezado-pagina">
@@ -53,8 +63,6 @@ export default function PanelSolicitudes() {
         </Link>
         <h1 style={{ margin: 0 }}>Solicitudes pendientes</h1>
       </div>
-
-      <TokenSelector />
 
       {mensajeAccion !== '' && (
         <p className="alerta-exito" style={{ marginTop: '0.75rem' }}>
