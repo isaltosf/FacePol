@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { obtenerFeed } from './api'
 import IniciarSesion from './IniciarSesion'
 import { cerrarSesion, useSesion } from './sesion'
@@ -64,17 +63,6 @@ export default function Feed() {
           </div>
         )}
       </div>
-
-      {haySesion && (
-        <p className="aviso-accion">
-          <span className="texto-suave">
-            ¿Eres administrador de una comunidad?
-          </span>
-          <Link className="boton" to="/comunidades">
-            Publicar anuncio o evento
-          </Link>
-        </p>
-      )}
 
       {!haySesion && (
         <IniciarSesion mensaje="Inicia sesión para ver el feed de tus comunidades." />
