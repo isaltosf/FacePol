@@ -11,6 +11,7 @@
 |
 */
 
+require __DIR__.'/api/auth.php';
 require __DIR__.'/api/comunidades.php';
 require __DIR__.'/api/membresias.php';
 require __DIR__.'/api/publicaciones.php';
