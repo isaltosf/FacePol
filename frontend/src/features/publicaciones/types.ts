@@ -70,7 +70,22 @@ export interface RespuestaRecurso<T> {
   data: T
 }
 
-/** Usuario autenticado, tal como lo devuelve POST /api/login. */
+/** Datos que viajan al backend al registrar una cuenta nueva. */
+export interface DatosRegistro {
+  name: string
+  email: string
+  password: string
+  password_confirmation: string
+}
+
+export const REGISTRO_VACIO: DatosRegistro = {
+  name: '',
+  email: '',
+  password: '',
+  password_confirmation: '',
+}
+
+/** Usuario autenticado, tal como lo devuelven POST /api/login y POST /api/register. */
 export interface UsuarioSesion {
   id: number
   nombre: string

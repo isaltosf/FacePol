@@ -1,0 +1,148 @@
+{
+  "info": {
+    "name": "FacePol - Modulo Comunidades",
+    "description": "Casos de prueba del modulo de gestion de comunidades (rama feat/comunidades).\n\nAntes de correr: php artisan migrate:fresh --seed && php artisan serve\n\nLos requests estan en el orden en que conviene capturarlos.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. POST crear comunidad (201)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Club de Fotografía ESPOL\",\n  \"descripcion\": \"Comunidad de fotografía documental y de naturaleza en el campus Gustavo Galindo. Salidas mensuales y talleres de revelado digital.\",\n  \"categoria\": \"cultural\",\n  \"logo\": \"https://espol.edu.ec/comunidades/fotografia.png\",\n  \"administrador_id\": 2\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/comunidades",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "comunidades"]
+        },
+        "description": "Creacion exitosa. Debe responder 201 Created con la comunidad nueva y el objeto administrador."
+      }
+    },
+    {
+      "name": "2. POST nombre duplicado y categoria invalida (422)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Club de Fotografía ESPOL\",\n  \"descripcion\": \"Intento de duplicado con categoría inválida.\",\n  \"categoria\": \"gastronomica\",\n  \"logo\": \"no-es-una-url\",\n  \"administrador_id\": 9999\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/comunidades",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "comunidades"]
+        },
+        "description": "Debe responder 422 con los mensajes de validacion en espanol para nombre, categoria, logo y administrador_id."
+      }
+    },
+    {
+      "name": "3. PUT editar comunidad (200)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Club de Fotografía y Video ESPOL\",\n  \"descripcion\": \"Ahora también producción audiovisual: cortometrajes, cobertura de eventos institucionales y un taller permanente de edición.\",\n  \"categoria\": \"cultural\",\n  \"logo\": \"https://espol.edu.ec/comunidades/fotografia-video.png\",\n  \"administrador_id\": 3\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/comunidades/11",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "comunidades", "11"]
+        },
+        "description": "Edita la comunidad creada en el paso 1 (id 11 con la base recien sembrada). Debe responder 200."
+      }
+    },
+    {
+      "name": "4. GET listado sin filtros",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/comunidades",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "comunidades"]
+        },
+        "description": "Listado de comunidades activas, paginado de 10. Fijate en el bloque meta: per_page 10, total 11, last_page 2."
+      }
+    },
+    {
+      "name": "5. GET filtro por categoria",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/comunidades?categoria=deportiva",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "comunidades"],
+          "query": [
+            { "key": "categoria", "value": "deportiva" }
+          ]
+        },
+        "description": "Solo Club de Futbol ESPOL y Seleccion de Voley Politecnico."
+      }
+    },
+    {
+      "name": "6. GET busqueda por texto",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/comunidades?q=robotica",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "comunidades"],
+          "query": [
+            { "key": "q", "value": "robotica" }
+          ]
+        },
+        "description": "Busqueda parcial en nombre y descripcion. Encuentra Club de Robotica ESPOL. Requiere MySQL: su collation utf8mb4_unicode_ci ignora acentos."
+      }
+    },
+    {
+      "name": "7. GET detalle inexistente (404 en JSON)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/comunidades/9999",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "comunidades", "9999"]
+        },
+        "description": "Extra. Demuestra que el 404 sale en JSON y no como pagina HTML de Laravel."
+      }
+    },
+    {
+      "name": "8. GET filtros combinados",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/comunidades?q=club&categoria=deportiva",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "comunidades"],
+          "query": [
+            { "key": "q", "value": "club" },
+            { "key": "categoria", "value": "deportiva" }
+          ]
+        },
+        "description": "Extra. Los dos filtros se combinan: solo Club de Futbol ESPOL."
+      }
+    }
+  ]
+}
