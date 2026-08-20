@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
+import { Link } from 'react-router-dom'
 import { iniciarSesion } from './api'
 import { guardarSesion } from './sesion'
 
@@ -94,6 +95,10 @@ export default function IniciarSesion({ mensaje = 'Necesitas iniciar sesión par
             {enviando ? 'Ingresando…' : 'Ingresar'}
           </button>
         </form>
+
+        <p className="texto-suave">
+          ¿No tienes cuenta? <Link to="/registro">Regístrate</Link>
+        </p>
       </section>
     </div>
   )

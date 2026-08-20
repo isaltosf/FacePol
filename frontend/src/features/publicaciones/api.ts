@@ -2,6 +2,7 @@ import { api } from '../../api/client'
 import { obtenerToken } from './sesion'
 import type {
   DatosPublicacion,
+  DatosRegistro,
   Publicacion,
   RespuestaPaginada,
   RespuestaRecurso,
@@ -22,6 +23,21 @@ function apiAutenticada<T>(path: string, options: RequestInit = {}): Promise<T> 
       ...options.headers,
     },
   })
+}
+
+/** POST /api/register — crea la cuenta y devuelve el mismo par token/usuario que el login. */
+export async function registrarse(
+  datos: DatosRegistro,
+): Promise<{ token: string; user: UsuarioSesion }> {
+  const respuesta = await api<RespuestaRecurso<{ token: string; user: UsuarioSesion }>>(
+    '/register',
+    {
+      method: 'POST',
+      body: JSON.stringify(datos),
+    },
+  )
+
+  return respuesta.data
 }
 
 /** POST /api/login — no requiere token, así que usa `api()` directamente. */

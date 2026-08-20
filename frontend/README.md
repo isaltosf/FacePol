@@ -12,7 +12,8 @@ npm run dev                 # http://localhost:5173
 ```
 
 El backend de Laravel debe estar corriendo en `http://localhost:8000`
-(`php artisan serve` desde la raíz del repo).
+(`php artisan serve` desde la carpeta `backend/` del repo; los pasos completos están en el
+[README de la raíz](../README.md)).
 
 | Variable       | Descripción                | Valor por defecto              |
 | -------------- | -------------------------- | ------------------------------ |
@@ -32,7 +33,7 @@ src/
   features/
     comunidades/                Alexander
     membresias/                 José
-    publicaciones/              Victor
+    publicaciones/              Victor (incluye el login y el registro)
 ```
 
 Archivos **cerrados**, no los edites desde la rama de tu feature: `src/App.tsx`,
