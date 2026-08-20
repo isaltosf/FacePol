@@ -56,30 +56,32 @@ export default function ListaMiembros() {
       )}
 
       {!cargando && error === '' && miembros.length > 0 && (
-        <table className="tabla-miembros">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Nombre</th>
-              <th>Correo</th>
-              <th>Rol</th>
-              <th>Miembro desde</th>
-            </tr>
-          </thead>
-          <tbody>
-            {miembros.map((fila, i) => (
-              <tr key={fila.membresia_id}>
-                <td>{i + 1}</td>
-                <td>{fila.user.name}</td>
-                <td>{fila.user.email}</td>
-                <td>
-                  <span className="etiqueta">{fila.user.rol}</span>
-                </td>
-                <td>{new Date(fila.miembro_desde).toLocaleDateString('es-MX')}</td>
+        <div className="tabla-wrapper">
+          <table className="tabla-miembros">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Rol</th>
+                <th>Miembro desde</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {miembros.map((fila, i) => (
+                <tr key={fila.membresia_id}>
+                  <td>{i + 1}</td>
+                  <td>{fila.user.name}</td>
+                  <td>{fila.user.email}</td>
+                  <td>
+                    <span className="etiqueta">{fila.user.rol}</span>
+                  </td>
+                  <td>{new Date(fila.miembro_desde).toLocaleDateString('es-MX')}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </section>
   )

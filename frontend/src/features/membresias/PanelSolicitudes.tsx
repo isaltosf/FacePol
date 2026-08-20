@@ -81,48 +81,50 @@ export default function PanelSolicitudes() {
       )}
 
       {!cargando && error === '' && solicitudes.length > 0 && (
-        <table className="tabla-miembros">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Nombre</th>
-              <th>Correo</th>
-              <th>Solicitado el</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {solicitudes.map((fila, i) => {
-              const enProceso = procesando === fila.membresia_id
-              return (
-                <tr key={fila.membresia_id}>
-                  <td>{i + 1}</td>
-                  <td>{fila.user.name}</td>
-                  <td>{fila.user.email}</td>
-                  <td>{new Date(fila.solicitado_en).toLocaleDateString('es-MX')}</td>
-                  <td>
-                    <div style={{ display: 'flex', gap: '0.5rem' }}>
-                      <button
-                        className="boton"
-                        disabled={enProceso}
-                        onClick={() => handleAccion(fila.membresia_id, 'aprobada')}
-                      >
-                        {enProceso ? '…' : 'Aprobar'}
-                      </button>
-                      <button
-                        className="boton boton-peligro"
-                        disabled={enProceso}
-                        onClick={() => handleAccion(fila.membresia_id, 'rechazada')}
-                      >
-                        {enProceso ? '…' : 'Rechazar'}
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+        <div className="tabla-wrapper">
+          <table className="tabla-miembros">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Solicitado el</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {solicitudes.map((fila, i) => {
+                const enProceso = procesando === fila.membresia_id
+                return (
+                  <tr key={fila.membresia_id}>
+                    <td>{i + 1}</td>
+                    <td>{fila.user.name}</td>
+                    <td>{fila.user.email}</td>
+                    <td>{new Date(fila.solicitado_en).toLocaleDateString('es-MX')}</td>
+                    <td>
+                      <div className="tabla-acciones">
+                        <button
+                          className="boton boton-sm"
+                          disabled={enProceso}
+                          onClick={() => handleAccion(fila.membresia_id, 'aprobada')}
+                        >
+                          {enProceso ? '…' : 'Aprobar'}
+                        </button>
+                        <button
+                          className="boton boton-peligro boton-sm"
+                          disabled={enProceso}
+                          onClick={() => handleAccion(fila.membresia_id, 'rechazada')}
+                        >
+                          {enProceso ? '…' : 'Rechazar'}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
       )}
     </section>
   )
