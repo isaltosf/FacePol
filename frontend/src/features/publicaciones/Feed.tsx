@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { obtenerFeed } from './api'
 import IniciarSesion from './IniciarSesion'
-import { cerrarSesion, useSesion } from './sesion'
+import { useSesion } from './sesion'
 import { ETIQUETAS_TIPO } from './types'
 import type { Publicacion } from './types'
 
@@ -14,7 +14,7 @@ function formatearFecha(iso: string): string {
 
 /** Feed cronológico de anuncios y eventos de las comunidades del usuario. */
 export default function Feed() {
-  const { usuario, haySesion } = useSesion()
+  const { haySesion } = useSesion()
   const [publicaciones, setPublicaciones] = useState<Publicacion[]>([])
   const [pagina, setPagina] = useState(1)
   const [ultimaPagina, setUltimaPagina] = useState(1)
@@ -54,14 +54,6 @@ export default function Feed() {
     <section>
       <div className="encabezado-pagina">
         <h1>Feed</h1>
-        {haySesion && (
-          <div>
-            <span className="texto-suave">{usuario?.nombre}</span>{' '}
-            <button className="boton-enlace" onClick={cerrarSesion}>
-              Cerrar sesión
-            </button>
-          </div>
-        )}
       </div>
 
       {!haySesion && (
