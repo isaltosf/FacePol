@@ -10,3 +10,16 @@ Thumbs.db
 /.idea
 /.vscode
 /.claude
+/vendor/
+/bootstrap/cache/
+/storage/*.key
+/storage/framework/views/
+/storage/framework/cache/
+/storage/framework/sessions/
+/storage/logs/
+/backend/vendor/
+/backend/bootstrap/cache/
+/backend/storage/framework/views/
+/backend/storage/framework/cache/
+/backend/storage/framework/sessions/
+/backend/storage/logs/
