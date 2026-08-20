@@ -69,12 +69,14 @@ export default function ListaMiembros() {
             </thead>
             <tbody>
               {miembros.map((fila, i) => (
-                <tr key={fila.membresia_id}>
+                <tr key={fila.membresia_id ?? `admin-${fila.user.id}`}>
                   <td>{i + 1}</td>
                   <td>{fila.user.name}</td>
                   <td>{fila.user.email}</td>
                   <td>
-                    <span className="etiqueta">{fila.user.rol}</span>
+                    <span className="etiqueta">
+                      {fila.es_administrador ? 'administrador' : fila.user.rol}
+                    </span>
                   </td>
                   <td>{new Date(fila.miembro_desde).toLocaleDateString('es-MX')}</td>
                 </tr>

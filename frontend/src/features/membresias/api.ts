@@ -1,6 +1,12 @@
 import { api } from '../../api/client'
 import { obtenerToken } from '../publicaciones/sesion'
-import type { EstadoMembresia, FilaMiembro, FilaSolicitud, RespuestaLista } from './types'
+import type {
+  EstadoMembresia,
+  FilaMiembro,
+  FilaSolicitud,
+  MiMembresia,
+  RespuestaLista,
+} from './types'
 
 /** Wrapper de api() que inyecta el Bearer token de la sesión activa. */
 function apiAuth<T>(path: string, options: RequestInit = {}): Promise<T> {
@@ -19,6 +25,14 @@ export async function solicitarMembresia(
   return apiAuth<{ message: string }>(`/comunidades/${comunidadId}/membresias`, {
     method: 'POST',
   })
+}
+
+/** GET /api/comunidades/{id}/mi-membresia */
+export async function obtenerMiMembresia(comunidadId: number | string): Promise<MiMembresia> {
+  const respuesta = await apiAuth<{ data: MiMembresia }>(
+    `/comunidades/${comunidadId}/mi-membresia`,
+  )
+  return respuesta.data
 }
 
 /** GET /api/comunidades/{id}/miembros */

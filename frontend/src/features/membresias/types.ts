@@ -8,9 +8,16 @@ export interface UsuarioResumen {
 
 /** Fila que devuelve GET /api/comunidades/{id}/miembros */
 export interface FilaMiembro {
-  membresia_id: number
+  membresia_id: number | null
   miembro_desde: string
+  es_administrador: boolean
   user: UsuarioResumen
+}
+
+/** GET /api/comunidades/{id}/mi-membresia */
+export interface MiMembresia {
+  es_administrador: boolean
+  estado: 'pendiente' | 'aprobada' | 'rechazada' | null
 }
 
 /** Fila que devuelve GET /api/comunidades/{id}/solicitudes */

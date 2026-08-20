@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import AccionesMembresia from '../membresias/AccionesMembresia'
+import { useMiMembresia } from '../membresias/useMiMembresia'
 import AccionesPublicaciones from '../publicaciones/AccionesPublicaciones'
 import { obtenerComunidad } from './api'
 import { ETIQUETAS_CATEGORIA } from './types'
@@ -17,6 +18,7 @@ export default function DetalleComunidad() {
   const [comunidad, setComunidad] = useState<Comunidad | null>(null)
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState('')
+  const { esAdministrador } = useMiMembresia(id)
 
   useEffect(() => {
     let vigente = true
@@ -65,6 +67,14 @@ export default function DetalleComunidad() {
         </Link>
         <div className="acciones-encabezado">
           <AccionesPublicaciones comunidadId={comunidad.id} />
+          {esAdministrador && (
+            <Link
+              className="boton boton-secundario"
+              to={`/comunidades/${comunidad.id}/solicitudes`}
+            >
+              Panel de solicitudes
+            </Link>
+          )}
           <Link className="boton" to={`/comunidades/${comunidad.id}/editar`}>
             Editar
           </Link>
@@ -97,6 +107,13 @@ export default function DetalleComunidad() {
               : `Usuario #${comunidad.administrador_id}`}
           </dd>
         </dl>
+
+        <Link
+          className="boton boton-secundario"
+          to={`/comunidades/${comunidad.id}/miembros`}
+        >
+          Ver miembros
+        </Link>
       </article>
 
       {/* Punto de extensión del módulo Membresías. */}

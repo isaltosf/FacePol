@@ -20,10 +20,17 @@ Route::middleware([ForceJsonResponse::class, 'auth:sanctum'])->group(function ()
         [MembresiaController::class, 'actualizarEstado'],
     );
 
-    // Ver miembros aprobados de una comunidad.
+    // Ver miembros aprobados de una comunidad (incluye al administrador).
     Route::get(
         'comunidades/{comunidadId}/miembros',
         [MembresiaController::class, 'verMiembros'],
+    );
+
+    // Cómo se relaciona el usuario autenticado con esta comunidad (admin,
+    // miembro, solicitud pendiente/rechazada, o ninguna relación).
+    Route::get(
+        'comunidades/{comunidadId}/mi-membresia',
+        [MembresiaController::class, 'miEstado'],
     );
 
     // Ver solicitudes pendientes de una comunidad (solo el administrador).

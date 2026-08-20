@@ -96,13 +96,44 @@ class MembresiaController extends Controller
     }
 
     /**
+     * GET /api/comunidades/{comunidadId}/mi-membresia
+     *
+     * Le dice al frontend cómo se relaciona el usuario autenticado con esta
+     * comunidad, para decidir qué botones mostrarle (solicitar / ya es
+     * miembro / es el administrador).
+     */
+    public function miEstado(Request $request, int $comunidadId): JsonResponse
+    {
+        $comunidad = Comunidad::find($comunidadId);
+
+        if (! $comunidad) {
+            return response()->json(['message' => 'La comunidad solicitada no existe.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $user = $request->user();
+
+        $membresia = Membresia::where('user_id', $user->id)
+            ->where('comunidad_id', $comunidadId)
+            ->first();
+
+        return response()->json([
+            'data' => [
+                'es_administrador' => $comunidad->administrador_id === $user->id,
+                'estado' => $membresia?->estado,
+            ],
+        ]);
+    }
+
+    /**
      * GET /api/comunidades/{comunidadId}/miembros
      *
-     * Devuelve la lista de usuarios con membresía aprobada en la comunidad.
+     * Devuelve la lista de usuarios con membresía aprobada en la comunidad,
+     * más el administrador (que es miembro de facto aunque no tenga una fila
+     * de membresía aprobada).
      */
     public function verMiembros(int $comunidadId): JsonResponse
     {
-        $comunidad = Comunidad::find($comunidadId);
+        $comunidad = Comunidad::with('administrador:id,name,email,rol')->find($comunidadId);
 
         if (! $comunidad) {
             return response()->json(['message' => 'La comunidad solicitada no existe.'], Response::HTTP_NOT_FOUND);
@@ -111,14 +142,23 @@ class MembresiaController extends Controller
         $miembros = Membresia::with('user:id,name,email,rol')
             ->where('comunidad_id', $comunidadId)
             ->where('estado', 'aprobada')
+            ->where('user_id', '!=', $comunidad->administrador_id)
             ->get()
             ->map(fn (Membresia $m) => [
                 'membresia_id' => $m->id,
                 'miembro_desde' => $m->updated_at,
+                'es_administrador' => false,
                 'user' => $m->user,
             ]);
 
-        return response()->json(['data' => $miembros]);
+        $filaAdministrador = collect([[
+            'membresia_id' => null,
+            'miembro_desde' => $comunidad->created_at,
+            'es_administrador' => true,
+            'user' => $comunidad->administrador,
+        ]]);
+
+        return response()->json(['data' => $filaAdministrador->concat($miembros)]);
     }
 
     /**
