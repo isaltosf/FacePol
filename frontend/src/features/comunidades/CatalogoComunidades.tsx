@@ -138,7 +138,11 @@ export default function CatalogoComunidades() {
         <>
           <div className="grid">
             {comunidades.map((comunidad) => (
-              <article className="tarjeta" key={comunidad.id}>
+              <Link
+                key={comunidad.id}
+                to={`/comunidades/${comunidad.id}`}
+                className="tarjeta tarjeta-enlace"
+              >
                 {comunidad.logo !== null && comunidad.logo !== '' ? (
                   <img className="tarjeta-logo" src={comunidad.logo} alt="" />
                 ) : (
@@ -146,15 +150,13 @@ export default function CatalogoComunidades() {
                 )}
 
                 <div className="tarjeta-cuerpo">
-                  <h3>
-                    <Link to={`/comunidades/${comunidad.id}`}>{comunidad.nombre}</Link>
-                  </h3>
+                  <h3>{comunidad.nombre}</h3>
                   <span className="etiqueta">
                     {ETIQUETAS_CATEGORIA[comunidad.categoria] ?? comunidad.categoria}
                   </span>
                   <p>{recortar(comunidad.descripcion)}</p>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
 

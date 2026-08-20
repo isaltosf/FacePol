@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ErrorValidacion } from '../../api/client'
 import type { ErroresValidacion } from '../../api/client'
+import { obtenerUsuario } from '../publicaciones/sesion'
 import { CATEGORIAS, ETIQUETAS_CATEGORIA } from './types'
 import type { Categoria, Comunidad, DatosComunidad } from './types'
 
@@ -51,7 +52,12 @@ export default function FormularioComunidad({
     setErrores({})
 
     try {
-      const comunidad = await onEnviar(datos)
+      const usuario = obtenerUsuario()
+      const datosConAdmin: DatosComunidad = {
+        ...datos,
+        administrador_id: String(usuario?.id ?? datos.administrador_id),
+      }
+      const comunidad = await onEnviar(datosConAdmin)
       navegar(`/comunidades/${comunidad.id}`)
     } catch (problema: unknown) {
       if (problema instanceof ErrorValidacion) {
@@ -128,20 +134,6 @@ export default function FormularioComunidad({
             onChange={(evento) => cambiar('logo', evento.target.value)}
           />
           <ErroresDelCampo mensajes={errores.logo} />
-        </div>
-
-        <div className="campo">
-          {/* Temporal: mientras no haya login, el administrador se indica a mano. */}
-          <label htmlFor="administrador_id">ID del administrador</label>
-          <input
-            id="administrador_id"
-            type="number"
-            min="1"
-            className={errores.administrador_id ? 'invalido' : undefined}
-            value={datos.administrador_id}
-            onChange={(evento) => cambiar('administrador_id', evento.target.value)}
-          />
-          <ErroresDelCampo mensajes={errores.administrador_id} />
         </div>
 
         <div className="acciones-formulario">
