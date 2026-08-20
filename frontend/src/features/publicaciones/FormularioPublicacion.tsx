@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ErrorValidacion } from '../../api/client'
+import SelectorArchivo from '../../components/SelectorArchivo'
 import { crearPublicacion } from './api'
 import { useSesion } from './sesion'
 import { DATOS_VACIOS, ETIQUETAS_TIPO, TIPOS_PUBLICACION } from './types'
@@ -119,10 +120,12 @@ export default function FormularioPublicacion() {
           <label htmlFor="descripcion">Descripción</label>
           <textarea
             id="descripcion"
+            maxLength={250}
             className={errores.descripcion ? 'invalido' : undefined}
             value={datos.descripcion}
             onChange={(e) => setDatos({ ...datos, descripcion: e.target.value })}
           />
+          <p className="texto-suave">{datos.descripcion.length}/250 caracteres</p>
           <ErroresDelCampo mensajes={errores.descripcion} />
         </div>
 
@@ -139,6 +142,17 @@ export default function FormularioPublicacion() {
             <ErroresDelCampo mensajes={errores.fecha_evento} />
           </div>
         )}
+
+        <div className="campo">
+          <label>Imagen (opcional)</label>
+          <SelectorArchivo
+            etiqueta="Subir imagen"
+            archivo={datos.imagen}
+            onCambiar={(imagen) => setDatos({ ...datos, imagen })}
+            invalido={errores.imagen !== undefined}
+          />
+          <ErroresDelCampo mensajes={errores.imagen} />
+        </div>
 
         {errorGeneral !== '' && <p className="alerta-error">{errorGeneral}</p>}
 

@@ -37,7 +37,8 @@ export interface DatosComunidad {
   nombre: string
   descripcion: string
   categoria: Categoria | ''
-  logo: string
+  /** Archivo nuevo de logo; null si no se cambia (se conserva el actual al editar). */
+  logo: File | null
   administrador_id: string
 }
 
@@ -46,7 +47,7 @@ export const DATOS_VACIOS: DatosComunidad = {
   nombre: '',
   descripcion: '',
   categoria: '',
-  logo: '',
+  logo: null,
   administrador_id: '',
 }
 

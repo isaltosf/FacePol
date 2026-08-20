@@ -31,6 +31,7 @@ class Publicacion extends Model
         'descripcion',
         'tipo',
         'fecha_evento',
+        'imagen_path',
     ];
 
     /**

@@ -75,6 +75,14 @@ export default function Feed() {
           <ul className="lista-publicaciones">
             {publicaciones.map((publicacion) => (
               <li key={publicacion.id} className="tarjeta">
+                {publicacion.imagen_url !== null && (
+                  <img
+                    className="imagen-publicacion"
+                    src={publicacion.imagen_url}
+                    alt={publicacion.titulo}
+                  />
+                )}
+
                 <div className="tarjeta-cuerpo">
                   <div className="encabezado-pagina">
                     <span className="etiqueta">{ETIQUETAS_TIPO[publicacion.tipo]}</span>

@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Models\Comunidad;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @mixin Comunidad
@@ -23,7 +24,13 @@ class ComunidadResource extends JsonResource
             'nombre' => $this->nombre,
             'descripcion' => $this->descripcion,
             'categoria' => $this->categoria,
-            'logo' => $this->logo,
+            // Comunidades antiguas guardaron una URL externa completa; las nuevas
+            // guardan la ruta relativa de storage/app/public/uploads.
+            'logo' => match (true) {
+                $this->logo === null => null,
+                str_starts_with($this->logo, 'http') => $this->logo,
+                default => Storage::disk('public')->url($this->logo),
+            },
             'activa' => $this->activa,
             'administrador_id' => $this->administrador_id,
             'administrador' => $this->whenLoaded('administrador', fn () => [

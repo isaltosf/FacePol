@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Models\Publicacion;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @mixin Publicacion
@@ -24,6 +25,7 @@ class PublicacionResource extends JsonResource
             'descripcion' => $this->descripcion,
             'tipo' => $this->tipo,
             'fecha_evento' => $this->fecha_evento?->toIso8601String(),
+            'imagen_url' => $this->imagen_path ? Storage::disk('public')->url($this->imagen_path) : null,
             'comunidad_id' => $this->comunidad_id,
             'comunidad' => $this->whenLoaded('comunidad', fn () => [
                 'id' => $this->comunidad->id,

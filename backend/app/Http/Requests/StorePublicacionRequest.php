@@ -25,10 +25,12 @@ class StorePublicacionRequest extends FormRequest
     {
         return [
             'titulo' => ['required', 'string', 'max:150'],
-            'descripcion' => ['required', 'string', 'max:2000'],
+            'descripcion' => ['required', 'string', 'max:250'],
             'tipo' => ['required', Rule::in(Publicacion::TIPOS)],
             // Un evento necesita fecha; en un anuncio simplemente se ignora si llega.
             'fecha_evento' => ['required_if:tipo,evento', 'nullable', 'date'],
+            // Imagen opcional del anuncio o evento (archivo, no URL).
+            'imagen' => ['nullable', 'image', 'max:5120'],
         ];
     }
 
@@ -53,6 +55,9 @@ class StorePublicacionRequest extends FormRequest
 
             'fecha_evento.required_if' => 'La fecha del evento es obligatoria cuando el tipo es "evento".',
             'fecha_evento.date' => 'La fecha del evento no es una fecha válida.',
+
+            'imagen.image' => 'El archivo debe ser una imagen.',
+            'imagen.max' => 'La imagen no puede pesar más de :max KB.',
         ];
     }
 }

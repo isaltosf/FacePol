@@ -8,6 +8,7 @@ import type { DatosComunidad } from './types'
 export default function EditarComunidad() {
   const { id = '' } = useParams()
   const [valoresIniciales, setValoresIniciales] = useState<DatosComunidad | null>(null)
+  const [logoActual, setLogoActual] = useState<string | null>(null)
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState('')
 
@@ -24,9 +25,10 @@ export default function EditarComunidad() {
           nombre: comunidad.nombre,
           descripcion: comunidad.descripcion,
           categoria: comunidad.categoria,
-          logo: comunidad.logo ?? '',
+          logo: null,
           administrador_id: String(comunidad.administrador_id),
         })
+        setLogoActual(comunidad.logo)
       })
       .catch((problema: unknown) => {
         if (!vigente) return
@@ -56,6 +58,7 @@ export default function EditarComunidad() {
       titulo="Editar comunidad"
       textoBoton="Guardar cambios"
       valoresIniciales={valoresIniciales}
+      logoActual={logoActual}
       onEnviar={(datos) => actualizarComunidad(id, datos)}
     />
   )

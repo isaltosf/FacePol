@@ -10,6 +10,7 @@ use App\Models\Publicacion;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 class PublicacionController extends Controller
@@ -38,8 +39,18 @@ class PublicacionController extends Controller
             );
         }
 
+        $datos = $request->validated();
+
+        // La imagen viaja aparte (archivo, no en $request->validated() como escalar);
+        // se guarda en storage/app/public/uploads y solo se persiste la ruta relativa.
+        unset($datos['imagen']);
+
+        if ($request->hasFile('imagen')) {
+            $datos['imagen_path'] = $request->file('imagen')->store('uploads', 'public');
+        }
+
         $publicacion = Publicacion::create([
-            ...$request->validated(),
+            ...$datos,
             'comunidad_id' => $comunidadId,
             'autor_id' => $user->id,
         ]);
@@ -51,15 +62,20 @@ class PublicacionController extends Controller
 
     /**
      * Feed cronológico de anuncios y eventos de las comunidades a las que
-     * pertenece el estudiante autenticado (membresía en estado "aprobada").
+     * pertenece el estudiante autenticado (membresía en estado "aprobada")
+     * más las comunidades que administra, aunque no tenga membresía aprobada
+     * en ellas: ser dueño de la comunidad ya implica poder ver lo que publica.
      *
      * GET /api/feed
      */
     public function feed(Request $request): AnonymousResourceCollection
     {
-        $comunidadIds = Membresia::where('user_id', $request->user()->id)
+        $userId = $request->user()->id;
+
+        $comunidadIds = Membresia::where('user_id', $userId)
             ->where('estado', 'aprobada')
-            ->pluck('comunidad_id');
+            ->pluck('comunidad_id')
+            ->merge(Comunidad::where('administrador_id', $userId)->pluck('id'));
 
         $publicaciones = Publicacion::with(['comunidad', 'autor'])
             ->whereIn('comunidad_id', $comunidadIds)

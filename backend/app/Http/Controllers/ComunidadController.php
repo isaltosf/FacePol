@@ -10,6 +10,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 class ComunidadController extends Controller
@@ -51,7 +52,17 @@ class ComunidadController extends Controller
      */
     public function store(StoreComunidadRequest $request): JsonResponse
     {
-        $comunidad = Comunidad::create($request->validated());
+        $datos = $request->validated();
+
+        // El logo viaja como archivo, no como escalar; se guarda en
+        // storage/app/public/uploads y solo se persiste la ruta relativa.
+        unset($datos['logo']);
+
+        if ($request->hasFile('logo')) {
+            $datos['logo'] = $request->file('logo')->store('uploads', 'public');
+        }
+
+        $comunidad = Comunidad::create($datos);
 
         return ComunidadResource::make($comunidad->load('administrador'))
             ->response()
@@ -75,7 +86,23 @@ class ComunidadController extends Controller
      */
     public function update(UpdateComunidadRequest $request, Comunidad $comunidad): ComunidadResource
     {
-        $comunidad->update($request->validated());
+        $datos = $request->validated();
+
+        // Si no llega un archivo nuevo, se deja el logo actual tal cual (no se
+        // manda a null solo porque el campo no viajó en este envío).
+        unset($datos['logo']);
+
+        if ($request->hasFile('logo')) {
+            // Borra el logo anterior del disco si era un archivo propio (no una
+            // URL externa heredada) para no dejar huérfanos en storage/uploads.
+            if ($comunidad->logo !== null && ! str_starts_with($comunidad->logo, 'http')) {
+                Storage::disk('public')->delete($comunidad->logo);
+            }
+
+            $datos['logo'] = $request->file('logo')->store('uploads', 'public');
+        }
+
+        $comunidad->update($datos);
 
         return ComunidadResource::make($comunidad->load('administrador'));
     }

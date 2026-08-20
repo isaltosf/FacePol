@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ErrorValidacion } from '../../api/client'
 import type { ErroresValidacion } from '../../api/client'
+import SelectorArchivo from '../../components/SelectorArchivo'
 import { obtenerUsuario } from '../publicaciones/sesion'
 import { CATEGORIAS, ETIQUETAS_CATEGORIA } from './types'
 import type { Categoria, Comunidad, DatosComunidad } from './types'
@@ -17,6 +18,8 @@ interface Props {
   titulo: string
   textoBoton: string
   valoresIniciales: DatosComunidad
+  /** URL del logo ya guardado, para mostrarlo como vista previa al editar. */
+  logoActual?: string | null
   /** Crear o actualizar; devuelve la comunidad guardada para poder redirigir. */
   onEnviar: (datos: DatosComunidad) => Promise<Comunidad>
 }
@@ -31,6 +34,7 @@ export default function FormularioComunidad({
   titulo,
   textoBoton,
   valoresIniciales,
+  logoActual = null,
   onEnviar,
 }: Props) {
   const navegar = useNavigate()
@@ -97,10 +101,12 @@ export default function FormularioComunidad({
           <label htmlFor="descripcion">Descripción</label>
           <textarea
             id="descripcion"
+            maxLength={250}
             className={errores.descripcion ? 'invalido' : undefined}
             value={datos.descripcion}
             onChange={(evento) => cambiar('descripcion', evento.target.value)}
           />
+          <p className="texto-suave">{datos.descripcion.length}/250 caracteres</p>
           <ErroresDelCampo mensajes={errores.descripcion} />
         </div>
 
@@ -125,14 +131,21 @@ export default function FormularioComunidad({
         </div>
 
         <div className="campo">
-          <label htmlFor="logo">Logo (URL)</label>
-          <input
-            id="logo"
-            className={errores.logo ? 'invalido' : undefined}
-            placeholder="https://ejemplo.com/logo.png"
-            value={datos.logo}
-            onChange={(evento) => cambiar('logo', evento.target.value)}
+          <label>Logo</label>
+          {logoActual !== null && datos.logo === null && (
+            <img className="tarjeta-logo logo-vista-previa" src={logoActual} alt="Logo actual" />
+          )}
+          <SelectorArchivo
+            etiqueta="Subir logo"
+            archivo={datos.logo}
+            onCambiar={(archivo) => cambiar('logo', archivo)}
+            invalido={errores.logo !== undefined}
           />
+          {logoActual !== null && (
+            <p className="texto-suave">
+              Deja este campo vacío para conservar el logo actual.
+            </p>
+          )}
           <ErroresDelCampo mensajes={errores.logo} />
         </div>
 

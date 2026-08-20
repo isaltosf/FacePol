@@ -51,11 +51,16 @@ interface CuerpoError {
  * @param path Ruta relativa a la API, por ejemplo `/comunidades?page=2`.
  */
 export async function api<T>(path: string, options: RequestInit = {}): Promise<T> {
+  // Con FormData (subida de archivos) el navegador debe fijar su propio
+  // Content-Type con el boundary del multipart; si lo forzamos a JSON aquí,
+  // el backend no puede parsear el cuerpo.
+  const esFormData = options.body instanceof FormData
+
   const respuesta = await fetch(`${URL_API}${path}`, {
     ...options,
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
+      ...(esFormData ? {} : { 'Content-Type': 'application/json' }),
       ...options.headers,
     },
   })

@@ -26,6 +26,7 @@ export interface Publicacion {
   descripcion: string
   tipo: TipoPublicacion
   fecha_evento: string | null
+  imagen_url: string | null
   comunidad_id: number
   comunidad?: ComunidadResumen
   autor_id: number
@@ -40,6 +41,8 @@ export interface DatosPublicacion {
   descripcion: string
   tipo: TipoPublicacion | ''
   fecha_evento: string
+  /** Archivo de imagen opcional; se sube como multipart, no como URL. */
+  imagen: File | null
 }
 
 export const DATOS_VACIOS: DatosPublicacion = {
@@ -47,6 +50,7 @@ export const DATOS_VACIOS: DatosPublicacion = {
   descripcion: '',
   tipo: '',
   fecha_evento: '',
+  imagen: null,
 }
 
 /** Bloque "meta" de la paginación de Laravel. */

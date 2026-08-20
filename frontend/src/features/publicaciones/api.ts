@@ -61,14 +61,22 @@ export function obtenerFeed(pagina = 1): Promise<RespuestaPaginada<Publicacion>>
   return apiAutenticada<RespuestaPaginada<Publicacion>>(`/feed?page=${pagina}`)
 }
 
-/** Convierte el formulario al payload que espera StorePublicacionRequest. */
-function aPayload(datos: DatosPublicacion) {
-  return {
-    titulo: datos.titulo,
-    descripcion: datos.descripcion,
-    tipo: datos.tipo === '' ? null : datos.tipo,
-    fecha_evento: datos.fecha_evento.trim() === '' ? null : datos.fecha_evento,
-  }
+/**
+ * Convierte el formulario al payload que espera StorePublicacionRequest.
+ *
+ * Se envía como FormData (no JSON) porque `imagen` es un archivo; los demás
+ * campos viajan como texto dentro del mismo cuerpo multipart.
+ */
+function aPayload(datos: DatosPublicacion): FormData {
+  const formData = new FormData()
+
+  formData.append('titulo', datos.titulo)
+  formData.append('descripcion', datos.descripcion)
+  if (datos.tipo !== '') formData.append('tipo', datos.tipo)
+  if (datos.fecha_evento.trim() !== '') formData.append('fecha_evento', datos.fecha_evento)
+  if (datos.imagen !== null) formData.append('imagen', datos.imagen)
+
+  return formData
 }
 
 /** POST /api/comunidades/{id}/publicaciones */
@@ -80,7 +88,7 @@ export async function crearPublicacion(
     `/comunidades/${comunidadId}/publicaciones`,
     {
       method: 'POST',
-      body: JSON.stringify(aPayload(datos)),
+      body: aPayload(datos),
     },
   )
 

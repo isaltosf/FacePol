@@ -31,9 +31,9 @@ class UpdateComunidadRequest extends FormRequest
                 // Ignora el propio registro para que no choque consigo mismo.
                 Rule::unique('comunidades', 'nombre')->ignore($this->route('comunidad')),
             ],
-            'descripcion' => ['required', 'string', 'max:500'],
+            'descripcion' => ['required', 'string', 'max:250'],
             'categoria' => ['required', Rule::in(Comunidad::CATEGORIAS)],
-            'logo' => ['nullable', 'url', 'max:255'],
+            'logo' => ['nullable', 'image', 'max:5120'],
             'administrador_id' => ['required', Rule::exists('users', 'id')],
         ];
     }
@@ -58,8 +58,8 @@ class UpdateComunidadRequest extends FormRequest
             'categoria.required' => 'La categoría es obligatoria.',
             'categoria.in' => 'La categoría debe ser una de: academica, cultural, deportiva o tecnologica.',
 
-            'logo.url' => 'El logo debe ser una URL válida.',
-            'logo.max' => 'La URL del logo no puede superar los :max caracteres.',
+            'logo.image' => 'El logo debe ser una imagen.',
+            'logo.max' => 'El logo no puede pesar más de :max KB.',
 
             'administrador_id.required' => 'Debe indicar el administrador de la comunidad.',
             'administrador_id.exists' => 'El administrador seleccionado no existe.',
